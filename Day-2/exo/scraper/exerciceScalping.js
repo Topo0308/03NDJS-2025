@@ -1,4 +1,5 @@
 const cheerio = require('cheerio');
+const fs = require('fs'); 
 
 async function scrapeStandings() {
   try {
@@ -34,10 +35,9 @@ async function scrapeStandings() {
       }
     });
 
-    console.log('\nRésultats du classement:');
-    console.log(standings);
-
-    return standings;
+    // Sauvegarde dans un fichier JSON
+    fs.writeFileSync('classement.json', JSON.stringify(standings, null, 2), 'utf8');
+    console.log('\n✅ Fichier classement.json sauvegardé avec succès.');
 
   } catch (error) {
     console.error('Erreur lors du scraping:', error.message);
@@ -46,3 +46,4 @@ async function scrapeStandings() {
 }
 
 scrapeStandings();
+
