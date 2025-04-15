@@ -1,0 +1,21 @@
+Programmation asynchrone avec Node.js
+
+-Les CallbacksNode.js utilise un modèle non bloquant et asynchrone pour gérer les opérations
+ I/O (lecture de fichiers, requêtes HTTP, etc.). Voici les trois principales méthodes pour gérer
+ l'asynchronicité :
+
+1. Callbacks (fonctions de rappel)
+Fonction passée en argument à une autre fonction, appelée une fois l'opération terminée.
+
+Risque de "Callback Hell" (imbrication excessive).
+
+2. Promesses (Promises)
+Représentent une valeur future, évitant l’imbrication excessive.
+
+Méthodes .then() (succès) et .catch() (erreur).
+
+
+3. Async/Await (syntaxe moderne)
+Basé sur les promesses, mais avec une syntaxe synchrone plus lisible.
+
+Utilise async devant la fonction et await pour les opérations asynchrones.
