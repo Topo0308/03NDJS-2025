@@ -1,0 +1,11 @@
+Procedure Node js pour fait des repostory via ubuntu
+
+-git remote add origin  (lien vers le repository de notre compte git)
+-git commit -m "description du commite"
+-Git status
+-git add .
+-git commit -m "sandbox"
+-git push origin master
+
+
+2- 
