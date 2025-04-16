@@ -1,0 +1,11 @@
+Fullstack APi mongoose DB
+
+Cree un folder express_serveur dans notre folder exo du jour 3
+se placer dans notre dossier express serveur
+
+initiation du projet avec la commande: npm init -y
+puis installer : npm install mongoose
+puis installer: npm install express-json
+ 
+
+.Procédure d'authentification d'Authentification d'un utilisateur
