@@ -39,10 +39,10 @@ exports.login = async (req, res) => {
   res.json({ token });
 };
 
-exports.getProfile = (req, res) => {
-  const user = await User.findOne({ email });
+exports.getProfile = async (req, res) => {
+  const user = await User.findById(req.user.id);
   if (!user) return res.status(404).json({ error: 'User not found' });
-  const { password, ...userData } = user..toObject();
+  const { password, ...userData } = user.toObject();
   res.json(userData);
 };
 
