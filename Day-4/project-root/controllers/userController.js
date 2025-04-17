@@ -13,6 +13,9 @@ const { SECRET } = require('../middleware/auth'); //est utilisé pour signer les
 //inscription
 	//Récupère l’email et le password envoyés par le client
 exports.register = async (req, res) => {
+  if (!req.body || typeof req.body !== 'object') {
+    return res.status(400).json({ error: 'Missing or invalid JSON body' });
+  }
   const { email, password } = req.body;
   if (!email || !password) return res.status(400).json({ error: 'Missing fields' });
 
@@ -28,6 +31,9 @@ exports.register = async (req, res) => {
 };
 //connexion
 exports.login = async (req, res) => {
+  if (!req.body || typeof req.body !== 'object') {
+    return res.status(400).json({ error: 'Missing or invalid JSON body' });
+  }
   const { email, password } = req.body;
   const user = findUserByEmail(email);
   if (!user) return res.status(401).json({ error: 'Invalid credentials' });
@@ -35,10 +41,9 @@ exports.login = async (req, res) => {
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) return res.status(401).json({ error: 'Invalid credentials' });
 
-  const token = jwt.sign({ id: user.id, email: user.email }, SECRET, { expiresIn: '1h' });
-  res.json({ token });
+ const token = jwt.sign({ id: user.id, email: user.email }, SECRET, { expiresIn: '1h' });
+res.json({ token });
 };
-
 
 exports.getProfile = (req, res) => {
   const user = getUserById(req.user.id);
