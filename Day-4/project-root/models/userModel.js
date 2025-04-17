@@ -1,25 +1,10 @@
-let users = []; // Stockage des utilisateurs
+const mongoose = require('mongoose');
 
-const getUsers = () => users; //Renvoie tous les utilisateurs enregistrés
+const userSchema = new mongoose.Schema({
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  isAdmin: { type: Boolean, default: false }
+});
 
-//Ajoute un nouvel utilisateur au tableau et le retourne
-const addUser = (user) => {
-    users.push(user);
-    return user;
-};
+module.exports = mongoose.model('User', userSchema);
 
-const findUserByEmail = (email) => users.find(user => user.email === email);
-
-const getUserById = (id) => users.find(user => user.id === id);
-
-const removeUserById = (id) => {
-    users = users.filter(user => user.id !== id);
-};
-
-module.exports = {
-    getUsers,
-    addUser,
-    findUserByEmail,
-    getUserById,
-    removeUserById
-};
