@@ -12,14 +12,15 @@ exports.register = async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) return res.status(400).json({ error: 'Missing fields' });
 
-  const existingUser = findUserByEmail(email);
+  const existingUser = await User.findOne({ email });
   if (existingUser) return res.status(400).json({ error: 'Email already exists' });
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  const user = { id: uuidv4(), email, password: hashedPassword, isAdmin: false };
-  addUser(user);
+  const user = new User({ email, password: hashedPassword });
 
-  const { password: _, ...userWithoutPassword } = user;
+  await user.save();
+
+  const { password: _, ...userWithoutPassword } = user.toObject();
   res.status(201).json(userWithoutPassword);
 };
 //connexion
@@ -28,32 +29,36 @@ exports.login = async (req, res) => {
     return res.status(400).json({ error: 'Missing or invalid JSON body' });
   }
   const { email, password } = req.body;
-  const user = findUserByEmail(email);
+  const user = await User.findOne({ email });
   if (!user) return res.status(401).json({ error: 'Invalid credentials' });
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) return res.status(401).json({ error: 'Invalid credentials' });
 
- const token = jwt.sign({ id: user.id, email: user.email }, SECRET, { expiresIn: '1h' });
-res.json({ token });
+  const token = jwt.sign({ id: user.id, email: user.email }, SECRET, { expiresIn: '1h' });
+  res.json({ token });
 };
 
 exports.getProfile = (req, res) => {
-  const user = getUserById(req.user.id);
+  const user = await User.findOne({ email });
   if (!user) return res.status(404).json({ error: 'User not found' });
-  const { password, ...userData } = user;
+  const { password, ...userData } = user..toObject();
   res.json(userData);
 };
 
-exports.getAllUsers = (req, res) => {
-  const safeUsers = getUsers().map(({ password, ...rest }) => rest);
+exports.getAllUsers = async (req, res) => {
+  const users = await User.find({});
+  const safeUsers = users.map(({ _doc }) => {
+  const { password, ...rest } = _doc;
+    return rest;
+  });
   res.json(safeUsers);
 };
 
-exports.deleteUser = (req, res) => {
-  const user = getUserById(req.params.id);
+exports.deleteUser = async (req, res) => {
+  const user = await User.findById(req.params.id);
   if (!user) return res.status(404).json({ error: 'User not found' });
 
-  removeUserById(req.params.id);
+  await User.findByIdAndDelete(req.params.id);
   res.json({ message: 'User deleted' });
 };
