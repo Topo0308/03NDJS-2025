@@ -1,17 +1,10 @@
 const bcrypt = require('bcryptjs'); //pour hacher les mots de passe
 const jwt = require('jsonwebtoken'); //pour générer des tokens JWT
 const { v4: uuidv4 } = require('uuid'); //pour générer un ID unique à chaque utilisateur
-const {
-  getUsers,
-  addUser,
-  findUserByEmail,
-  getUserById,
-  removeUserById
-} = require('../models/userModel'); //Fonctions provenant du modèle utilisateur
+const User = require('../models/userModel'); //Fonctions provenant du modèle utilisateur
 const { SECRET } = require('../middleware/auth'); //est utilisé pour signer les JWT
 
 //inscription
-	//Récupère l’email et le password envoyés par le client
 exports.register = async (req, res) => {
   if (!req.body || typeof req.body !== 'object') {
     return res.status(400).json({ error: 'Missing or invalid JSON body' });
