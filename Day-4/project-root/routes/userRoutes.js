@@ -16,7 +16,9 @@ const { authMiddleware } = require('../middleware/auth');
 router.post('/register', register);
 router.post('/login', login);
 router.get('/me', authMiddleware, getProfile);
-router.get('/users', authMiddleware, getAllUsers);
-router.delete('/users/:id', authMiddleware, deleteUser);
+
+// protection des routes admin
+router.get('/users', authMiddleware, adminOnly, getAllUsers);
+router.delete('/users/:id', authMiddleware, adminOnly, deleteUser);
 
 module.exports = router;
