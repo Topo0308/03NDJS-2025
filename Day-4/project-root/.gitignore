@@ -1,3 +1,18 @@
 mongodb/bin/bin/mongod
 mongodb/bin/bin/mongos
 mongodb/bin/
+
+# Node modules
+node_modules/
+.env
+
+# MongoDB data
+mongodb/data/
+
+# Logs
+logs/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
