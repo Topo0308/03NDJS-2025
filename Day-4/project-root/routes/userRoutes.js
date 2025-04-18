@@ -11,7 +11,7 @@ const {
 } = require('../controllers/userController');
 
 //vérifie si un utilisateur est authentifié via le token JWT
-const { authMiddleware } = require('../middleware/auth');
+const { authMiddleware, adminOnly } = require('../middleware/auth');
 
 router.post('/register', register);
 router.post('/login', login);
