@@ -10,6 +10,12 @@ exports.register = async (req, res) => {
     return res.status(400).json({ error: 'Missing or invalid JSON body' });
   }
   const { email, password } = req.body;
+
+//validation renforce
+ if (!email || !password || !email.includes('@') || password.length < 6) {
+  return res.status(400).json({ error: 'Invalid email or password' });
+  }
+
   if (!email || !password) return res.status(400).json({ error: 'Missing fields' });
 
   const existingUser = await User.findOne({ email });
@@ -17,7 +23,7 @@ exports.register = async (req, res) => {
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const user = new User({ email, password: hashedPassword });
-
+  
   await user.save();
 
   const { password: _, ...userWithoutPassword } = user.toObject();
@@ -29,6 +35,10 @@ exports.login = async (req, res) => {
     return res.status(400).json({ error: 'Missing or invalid JSON body' });
   }
   const { email, password } = req.body;
+
+  if (!email || !password || !email.includes('@') || password.length < 6) {
+    return res.status(400).json({ error: 'Invalid email or password' });
+  }
   const user = await User.findOne({ email });
   if (!user) return res.status(401).json({ error: 'Invalid credentials' });
 
