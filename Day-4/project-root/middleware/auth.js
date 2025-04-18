@@ -15,4 +15,11 @@ function authMiddleware(req, res, next) {
   }
 }
 
-module.exports = { authMiddleware, SECRET };
+function adminOnly(req, res, next) {
+  if (!req.user || !req.user.isAdmin) {
+    return res.status(403).json({ error: 'Admin access only' });
+  }
+  next();
+}
+
+module.exports = { authMiddleware, SECRET, adminOnly };
